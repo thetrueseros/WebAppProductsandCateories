@@ -102,6 +102,6 @@ namespace WebAppProductsandCateories.Data
                 }
             }
             return product;
-        })
+        }
     }
 }
