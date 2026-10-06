@@ -68,6 +68,16 @@ namespace WebAppProductsandCateories.Controllers
         }
 
         // Delete - Mostrar formulario para eliminar un producto existente
+        public IActionResult Delete(int id)
+        {
+            var product = _dataAccess.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        })
+        // Delete - Formulario de proceso
         [HttpPost, ActionName("DeleteConfirmed")]
         public IActionResult DeleteConfirmed(int ProductId)
         {

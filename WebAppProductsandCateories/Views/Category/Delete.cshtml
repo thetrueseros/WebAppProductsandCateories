@@ -1,0 +1,13 @@
+﻿@model WebAppProductsandCateories.Models.CategoriesModel
+
+<h1>Borrar categoría</h1>
+
+<h3>¿Está seguro que desea borrar esta categoría?</h3>
+<div>
+    <h4>@Model.Name</h4>
+    <form asp-action="DeleteConfirmed">
+        <input type="hidden" asp-for="CategoryId" />
+        <input type="submit" value="Borrar" class="btn btn-danger" />
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
