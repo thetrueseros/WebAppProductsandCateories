@@ -75,7 +75,12 @@ namespace WebAppProductsandCateories.Controllers
         [HttpPost, ActionName("DeleteConfirmed")]
         public IActionResult DeleteConfirmed(int CategoryId)
         {
-            _dataAccess.DeleteCategory(CategoryId);
+            var ok = _dataAccess.DeleteCategory(CategoryId);
+            if (!ok)
+            {
+                TempData["Error"] = "No se puede eliminar la categoría: existen productos asignados.";
+                return RedirectToAction("Delete", new { id = CategoryId });
+            }
             return RedirectToAction("Index");
         }
     }

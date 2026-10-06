@@ -1,7 +1,15 @@
+using WebAppProductsandCateories.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register DataAccess with dependency injection
+builder.Services.AddSingleton<CategoryData>();
+
+// Register DataAccess with dependency injection
+builder.Services.AddSingleton<ProductData>();
 
 var app = builder.Build();
 

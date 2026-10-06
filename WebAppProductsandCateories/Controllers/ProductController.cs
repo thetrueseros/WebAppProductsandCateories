@@ -76,7 +76,7 @@ namespace WebAppProductsandCateories.Controllers
                 return NotFound();
             }
             return View(product);
-        })
+        }
         // Delete - Formulario de proceso
         [HttpPost, ActionName("DeleteConfirmed")]
         public IActionResult DeleteConfirmed(int ProductId)

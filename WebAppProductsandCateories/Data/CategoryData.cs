@@ -58,15 +58,34 @@ namespace WebAppProductsandCateories.Data
         }
 
         // Borrar una categoría por ID
-        public void DeleteCategory(int categoryId)
+        // Devuelve true si la categoría se borró; false si hay productos relacionados y no se borra
+        public bool DeleteCategory(int categoryId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("DELETE FROM Categories WHERE CategoryId = @CategoryId", connection);
-                command.Parameters.AddWithValue("@CategoryId", categoryId);
                 connection.Open();
-                command.ExecuteNonQuery();
+
+                // Comprobar si existen productos relacionados
+                using (var check = new SqlCommand("SELECT COUNT(1) FROM Products WHERE CategoryId = @CategoryId", connection))
+                {
+                    check.Parameters.AddWithValue("@CategoryId", categoryId);
+                    var countObj = check.ExecuteScalar();
+                    var count = (countObj == null || countObj == DBNull.Value) ? 0 : Convert.ToInt32(countObj);
+                    if (count > 0)
+                    {
+                        // Hay productos relacionados; no borrar
+                        return false;
+                    }
+                }
+
+                // No hay dependencias; borrar la categoría
+                using (var del = new SqlCommand("DELETE FROM Categories WHERE CategoryId = @CategoryId", connection))
+                {
+                    del.Parameters.AddWithValue("@CategoryId", categoryId);
+                    del.ExecuteNonQuery();
+                }
             }
+            return true;
         }
 
         // Obtener una única categoría por ID
