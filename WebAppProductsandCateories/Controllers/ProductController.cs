@@ -31,5 +31,53 @@ namespace WebAppProductsandCateories.Controllers
 
         // Create - Formulario de proceso
         [HttpPost]
+        public IActionResult Create(ProductModel product)
+        {
+            if (ModelState.IsValid)
+            {
+                _dataAccess.CreateProduct(product);
+                return RedirectToAction("Index");
+            }
+            ViewBag.Categories = GetCategories(); // para lista dropdown
+            return View(product);
+        }
+
+        // Edit - Mostrar formulario para editar un producto existente
+        public IActionResult Edit (int id)
+        {
+            var product = _dataAccess.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Categories = GetCategories(); // para lista dropdown
+            return View(product);
+        }
+
+        // Edit - Formulario de proceso
+        [HttpPost]
+        public IActionResult Edit(ProductModel product)
+        {
+            if (ModelState.IsValid)
+            {
+                _dataAccess.UpdateProduct(product);
+                return RedirectToAction("Index");
+            }
+            ViewBag.Categories = GetCategories(); // para lista dropdown
+            return View(product);
+        }
+
+        // Delete - Mostrar formulario para eliminar un producto existente
+        [HttpPost, ActionName("DeleteConfirmed")]
+        public IActionResult DeleteConfirmed(int ProductId)
+        {
+            _dataAccess.DeleteProduct(ProductId);
+            return RedirectToAction("Index");
+        }
+
+        private List<CategoriesModel> GetCategories()
+        {
+            return _dataAccessCat.GetCategories();
+        }
     }
 }
